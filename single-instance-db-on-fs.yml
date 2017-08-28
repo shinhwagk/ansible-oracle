@@ -1,0 +1,19 @@
+---
+
+- name: Host configuration
+  hosts: orafs
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  roles:
+    - common
+    - orahost
+
+- name: Database Server Installation & Database Creation
+  hosts: orafs
+  remote_user: ansible
+  become: yes
+  become_method: sudo
+  roles:
+    - oraswdb-install
+    - oradb-create
