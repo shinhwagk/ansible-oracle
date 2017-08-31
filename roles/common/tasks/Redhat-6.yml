@@ -1,0 +1,7 @@
+- name: Start and enable NTP For Service
+  service: 
+    name: ntpd 
+    state: started 
+    enabled: yes
+  when: 
+    - configure_ntp

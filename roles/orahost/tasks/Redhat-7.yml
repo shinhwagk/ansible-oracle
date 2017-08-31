@@ -1,0 +1,7 @@
+- name: Disable firewall
+  systemd: 
+    name: firewalld
+    state: stopped 
+    enabled: no
+  ignore_errors: true
+  tags: iptables

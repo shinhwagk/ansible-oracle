@@ -1,30 +1,20 @@
-# Common playbook - sets up the host generic stuff
 ---
 
-- name: Install EPEL Repo
-  yum: name={{ epel_rpm }} state=installed
-  when: configure_epel_repo and ansible_os_family == 'RedHat'
+- name: Check for correct OS family & min version
+  assert:
+    that: 
+      - ansible_os_family == 'RedHat'
+      - ansible_distribution_major_version >= 6
+    msg: "your linux version:{{ansible_os_family}} <> Redhat or {{ ansible_distribution_major_version }} < 6"
   tags:
-    - epelrepo
-
-- name: Get newest repo-file for OL (public-yum)
-  get_url: dest={{ repo_dir }}/{{ ol_repo_file }} url=http://public-yum.oracle.com/{{ ol_repo_file }} backup=yes
-  when: configure_public_yum_repo and ansible_distribution == 'OracleLinux'
-  tags:
-    - ol6repo
+    - oscheck
 
 - name: Install common packages OL/RHEL
-  when: install_os_packages and ansible_os_family == 'RedHat'
+  when: 
+    - install_os_packages 
   with_items: "{{ common_packages }}"
   yum: name={{ item }} state=installed
   tags:
     - commonpackages
 
-- name: Start and enable NTP
-  service: name=ntpd  state=started  enabled=yes
-  when: configure_ntp
-
-- name: Add motd
-  template: src=motd.j2 dest=/etc/motd
-  tags: motd
-  when: configure_motd
+- include: "Redhat-{{ ansible_distribution_major_version }}.yml"

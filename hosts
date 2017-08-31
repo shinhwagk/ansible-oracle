@@ -1,3 +1,2 @@
-[single-install]
-foo.example.com
-bar.example.com
+[single]
+10.65.103.75

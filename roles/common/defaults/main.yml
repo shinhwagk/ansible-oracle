@@ -1,0 +1,16 @@
+---
+
+install_os_packages: true
+configure_public_yum_repo: true
+configure_motd: true
+configure_ntp: true
+common_packages:
+  - vim
+  - unzip
+  - tar
+  - ntpdate
+  - wget
+  - curl
+  - ntp
+  - libselinux-python #selinux module need.
+  - bind-utils
