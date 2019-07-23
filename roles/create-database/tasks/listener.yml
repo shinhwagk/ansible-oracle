@@ -1,0 +1,15 @@
+- name: listener | Create responsefile for listener configuration
+  template: src=netca.{{ oracle_version_db }}.rsp.j2 dest={{ oracle_rsp_stage }}/{{ oracle_netca_rsp }}
+  become: true
+  become_user: "{{ oracle_user }}"
+  tags: responsefile_netca, listener_install
+
+- name: listener | Create listener
+  environment:
+    DISPLAY: ':0.0'
+  shell: "{{ oracle_home_db }}/bin/netca -silent -responseFile {{ oracle_rsp_stage }}/{{ oracle_netca_rsp }}"
+  args:
+    creates: "{{ oracle_home_db }}/network/admin/listener.ora"
+  become: true
+  become_user: "{{ oracle_user }}"
+  tags: listener_install

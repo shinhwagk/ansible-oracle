@@ -1,0 +1,6 @@
+[single]
+192.168.11.163 ansible_connection=ssh ansible_user=root  
+
+[single:vars]
+oracle_version_db = 11.2.0.4
+oracle_home_number = db_1

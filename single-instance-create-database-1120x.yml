@@ -1,0 +1,7 @@
+- name: Create Database
+  hosts: single
+  remote_user: root
+  roles:
+    - create-database
+  tags:
+    - create-database

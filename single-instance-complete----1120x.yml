@@ -1,0 +1,28 @@
+---
+- name: Host configuration
+  hosts: single
+  remote_user: root
+  roles:
+    - host-configure
+
+- name: Preinstallation
+  hosts: single
+  remote_user: root
+  roles:
+    - preinstallation
+
+- name: Install Oracle Software
+  hosts: single
+  remote_user: root
+  roles:
+    - { role: install-oracle }
+  tags:
+    - install-oracle
+
+- name: Create Database
+  hosts: single
+  remote_user: root
+  roles:
+    - create-database
+  tags:
+    - create-database

@@ -1,0 +1,22 @@
+---
+# - name: Host configuration
+#   hosts: single
+#   remote_user: root
+#   roles:
+#     - host-configure
+
+# - name: Preinstallation
+#   hosts: single
+#   remote_user: root
+#   roles:
+#     - preinstallation
+
+- name: Install Oracle Software
+  vars:
+    oracle_db_version: 11.2.0.4
+  hosts: single
+  remote_user: root
+  roles:
+    - { role: install-oracle, when: 1 == 1 }
+  tags:
+    - install-oracle

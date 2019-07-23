@@ -1,0 +1,26 @@
+oracle_user: oracle 
+oracle_group: oinstall                          
+oper_group: oper
+dba_group: dba      
+
+oracle_base: /u01/app/oracle
+oracle_home_db: "{{ oracle_base }}/{{ oracle_version_db }}/{{ oracle_home_number }}"
+
+oracle_user_home: "/home/{{ oracle_user }}"
+
+# software server
+# oracle_sw_source_www: http://10.65.103.15/software
+oracle_stage: "{{ oracle_user_home }}/stage"
+oracle_rsp_stage: "{{ oracle_stage }}/rsp"
+
+# oracle software install rsp
+oracle_db_responsefile: "db-install.rsp.{{ oracle_version_db }}.rsp"
+oracle_inventory_loc: /u01/app/oraInventory
+
+oracle_sw_image_db:
+  - { filename: linux.x64_11gR2_database_1of2.zip, version: 11.2.0.1 }
+  - { filename: linux.x64_11gR2_database_2of2.zip, version: 11.2.0.1 }
+  - { filename: linuxx64_12201_database.zip, version: 12.2.0.1 }
+  - { filename: linuxx64_12201_database.zip, version: 12.2.0.1 }
+  - { filename: p13390677_112040_Linux-x86-64_1of7.zip, version: 11.2.0.4 }
+  - { filename: p13390677_112040_Linux-x86-64_2of7.zip, version: 11.2.0.4 }

@@ -1,0 +1,44 @@
+---
+
+- name: Check the physical memory
+  assert:
+    that:
+      - ansible_memtotal_mb >= 1024
+    fail_msg: "your os memory less then 1G, recommended 2G"
+
+# df -h /tmp > 1g
+# - name: Ensure /tmp directory Disk Space greater than 1G
+#   assert:  
+#     that:
+#       - "{{item.size_total}} >= 102401111000"
+#     fail_msg: "/tmp"
+#   when: "{{item.mount == '/tmp'}}"
+#   loop: "{{ansible_mounts}}" 
+#   tags:
+#     - aaa
+
+# kernel check
+
+- name: Install common packages OL/RHEL
+  yum: name={{ item }} state=installed
+  loop: "{{ oracle_packages }}"
+  tags:
+    - oracle-packages
+
+- name: "Build hosts file"
+  lineinfile:
+    path: "/etc/hosts"
+    line: "127.0.0.1 {{ansible_hostname}}"
+  tags:
+    - hosts
+
+# close hugepage
+
+- include: "Redhat.yml"
+  when: 
+    - ansible_distribution in ['CentOS', 'Red Hat Enterprise Linux']
+
+- include: "OracleLinux.yml"
+  when: 
+    - ansible_distribution == 'OracleLinux'
+

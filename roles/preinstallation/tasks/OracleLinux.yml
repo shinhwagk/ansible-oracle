@@ -1,0 +1,23 @@
+- name: Download oracle RMP-GPG-KEY
+  get_url:
+    url: "http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol{{ansible_distribution_major_version}}"
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+
+- name: Download oracle RMP-GPG-KEY1
+  get_url:
+    url: "http://public-yum.oracle.com/RPM-GPG-KEY-oracle-ol{{ansible_distribution_major_version}}"
+    dest: /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+
+- name: Add oracle repository
+  yum_repository:
+    name: ol6_latest
+    description: EPEL YUM repo
+    baseurl: "https://yum.oracle.com/repo/OracleLinux/OL6/latest/$basearch/"
+    gpgcheck: yes
+    gpgkey: "file:///etc/pki/rpm-gpg/RPM-GPG-KEY-oracle"
+    enabled: yes
+
+- name: test
+  yum: 
+    name: "oracle-rdbms-server-11gR2-preinstall" 
+    state: installed

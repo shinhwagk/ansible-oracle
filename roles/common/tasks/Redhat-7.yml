@@ -1,7 +1,0 @@
-- name: Start and enable NTP For Systemctl
-  systemd: 
-    name: ntpd 
-    state: started 
-    enabled: yes
-  when: 
-    - configure_ntp

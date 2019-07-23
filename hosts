@@ -1,2 +1,12 @@
 [single]
-10.65.103.75
+192.168.11.162 ansible_connection=ssh ansible_user=root  ansible_ssh_pass=00000a
+
+[single:vars]
+oracle_sid = test
+oracle_version_db = 11.2.0.1
+oracle_home_number = db_1
+syspassword=oracle
+systempassword=oracle
+nationalcharacterset=
+characterset=
+gdbname

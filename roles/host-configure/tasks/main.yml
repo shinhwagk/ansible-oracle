@@ -1,0 +1,40 @@
+---
+
+- name: Check for correct OS family & min version
+  assert:
+    that:
+      - ansible_os_family == 'RedHat'
+      - ansible_distribution_major_version|int in [6, 7]
+    success_msg: "your linux family: {{ ansible_os_family }}, version: {{ ansible_distribution_major_version }}"
+    fail_msg: "your linux version:{{ ansible_os_family }} <> Redhat or {{ ansible_distribution_major_version }} < 6"
+  tags:
+    - check
+  
+- name: Disable selinux (permanently)
+  selinux: state=disabled
+
+- name: Disable selinux (runtime)
+  shell: setenforce 0
+  ignore_errors: true
+
+- name: present Automatic Memory Management (/dev/shm)
+  mount:
+    path: /dev/shm
+    src: shmfs
+    fstype: tmpfs
+    opts: "size=7g"
+    state: present
+
+- name: Set Automatic Memory Management (/dev/shm)
+  mount: name=/dev/shm src=shmfs fstype=tmpfs opts="size=5g" state=mounted
+
+# - name: Check dns for host
+#   command: nslookup {{ ansible_hostname }}
+#   register: ns
+#   ignore_errors: false
+
+- name: install libselinux-python
+  yum: name=libselinux-python state=latest
+
+- name: install unzip
+  yum: name=unzip state=latest
