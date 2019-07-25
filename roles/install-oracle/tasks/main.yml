@@ -43,19 +43,19 @@
 #     - oradbsw
 
 # temp
-- name: copy soft
-  copy: src="/mnt/d/{{item.filename}}" dest={{ oracle_stage }} #remote_src=yes
-  loop: "{{oracle_sw_image_db}}"
-  when: item.version == oracle_version_db
+# - name: copy soft
+#   copy: src="/mnt/c/software/{{item.filename}}" dest={{ oracle_stage }} #remote_src=yes
+#   loop: "{{oracle_sw_image_db}}"
+#   when: item.version == oracle_version_db
 
-- name: Extract files to stage-area
-  unarchive: src={{ oracle_stage }}/{{ item.filename }} dest={{ oracle_stage }}/{{ item.version }} copy=no
-  become: yes
-  become_user: "{{ oracle_user }}"
-  loop: "{{oracle_sw_image_db}}"
-  when: item.version == oracle_version_db
-  tags:
-    - oradbswunpack
+# - name: Extract files to stage-area
+#   unarchive: src={{ oracle_stage }}/{{ item.filename }} dest={{ oracle_stage }}/{{ item.version }} copy=no
+#   become: yes
+#   become_user: "{{ oracle_user }}"
+#   loop: "{{oracle_sw_image_db}}"
+#   when: item.version == oracle_version_db
+#   tags:
+#     - oradbswunpack
 
 - name: Setup response file for install (DB)
   template: src=db-install.rsp.{{ oracle_version_db }}.j2 dest={{ oracle_rsp_stage }}/{{ oracle_db_responsefile }}
@@ -65,21 +65,15 @@
     - responsefileswdb
 
 - name: Install Oracle Database Server
-  shell: "{{ oracle_stage }}/{{ oracle_version_db }}/database/runInstaller -silent -responseFile {{ oracle_rsp_stage }}/{{ oracle_db_responsefile }} -waitforcompletion"
+  shell: "{{ oracle_stage }}/{{ oracle_version_db }}/database/runInstaller -silent -responseFile {{ oracle_rsp_stage }}/{{ oracle_db_responsefile }} -ignoreSysPrereqs -ignorePrereq -waitforcompletion"
   become: yes
   become_user: "{{ oracle_user }}"
   register: oradbinstall
   tags:
     - oradbinstall
 
-# - debug: var=item
-#   with_items:
-#       #- "{{ oradbinstall.results }}"
-#       - "{{ oradbinstall.results|map(attribute='stdout_lines')|list }}"
-#   when: master_node
-#   tags:
-#     - oradbinstall
-#   ignore_errors: true
+- debug: 
+    msg: "{{oradbinstall.stdout}}"
 
 - name: Run oraInstroot script after installation
   shell: "{{ oracle_inventory_loc }}/orainstRoot.sh"

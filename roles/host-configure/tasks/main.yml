@@ -10,6 +10,10 @@
   tags:
     - check
   
+- name: install common packages
+  yum: name="{{item}}" state=installed
+  loop: "{{ common_packages }}"
+
 - name: Disable selinux (permanently)
   selinux: state=disabled
 
@@ -33,8 +37,3 @@
 #   register: ns
 #   ignore_errors: false
 
-- name: install libselinux-python
-  yum: name=libselinux-python state=latest
-
-- name: install unzip
-  yum: name=unzip state=latest
