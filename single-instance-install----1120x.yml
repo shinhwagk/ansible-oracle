@@ -1,4 +1,5 @@
 ---
+
 - name: Host configuration
   hosts: single
   remote_user: root
@@ -15,6 +16,6 @@
   hosts: single
   remote_user: root
   roles:
-    - { role: install-oracle, when: 1 == 1 }
+    - { role: install-oracle }
   tags:
     - install-oracle

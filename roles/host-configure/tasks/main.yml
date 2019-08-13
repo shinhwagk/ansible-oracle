@@ -15,7 +15,12 @@
   loop: "{{ common_packages }}"
 
 - name: Disable selinux (permanently)
-  selinux: state=disabled
+  lineinfile:
+    path: /etc/selinux/config
+    regexp: '^SELINUX='
+    line: SELINUX=enforcing
+  tags:
+    - closeSElinux
 
 - name: Disable selinux (runtime)
   shell: setenforce 0
@@ -26,11 +31,11 @@
     path: /dev/shm
     src: shmfs
     fstype: tmpfs
-    opts: "size=7g"
+    opts: "size=8g"
     state: present
 
 - name: Set Automatic Memory Management (/dev/shm)
-  mount: name=/dev/shm src=shmfs fstype=tmpfs opts="size=5g" state=mounted
+  mount: name=/dev/shm src=shmfs fstype=tmpfs opts="size=8g" state=mounted
 
 # - name: Check dns for host
 #   command: nslookup {{ ansible_hostname }}

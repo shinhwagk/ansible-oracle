@@ -1,4 +1,4 @@
-oracle_user: oracle 
+oracle_user: oracle
 oracle_group: oinstall                          
 oper_group: oper
 dba_group: dba      

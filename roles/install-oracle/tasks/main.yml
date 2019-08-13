@@ -7,6 +7,7 @@
     - "export ORACLE_BASE={{ oracle_base }}"
     - "export ORACLE_HOME={{ oracle_home_db }}"
     - "export ORACLE_SID={{ oracle_sid }}"
+    - "export PATH==$ORACLE_HOME/bin:$PATH"
 
 
 - name: Create stage directory (base)
@@ -43,44 +44,45 @@
 #     - oradbsw
 
 # temp
-# - name: copy soft
-#   copy: src="/mnt/c/software/{{item.filename}}" dest={{ oracle_stage }} #remote_src=yes
-#   loop: "{{oracle_sw_image_db}}"
-#   when: item.version == oracle_version_db
 
-# - name: Extract files to stage-area
-#   unarchive: src={{ oracle_stage }}/{{ item.filename }} dest={{ oracle_stage }}/{{ item.version }} copy=no
+- name: copy soft
+  copy: src="/mnt/c/software/{{item.filename}}" dest={{ oracle_stage }} #remote_src=yes
+  loop: "{{oracle_sw_image_db}}"
+  when: item.version == oracle_version_db
+
+- name: Extract files to stage-area
+  unarchive: src={{ oracle_stage }}/{{ item.filename }} dest={{ oracle_stage }}/{{ item.version }} copy=no
+  become: yes
+  become_user: "{{ oracle_user }}"
+  loop: "{{oracle_sw_image_db}}"
+  when: item.version == oracle_version_db
+  tags:
+    - oradbswunpack
+
+# - name: Setup response file for install (DB)
+#   template: src=db-install.rsp.{{ oracle_version_db }}.j2 dest={{ oracle_rsp_stage }}/{{ oracle_db_responsefile }}
 #   become: yes
 #   become_user: "{{ oracle_user }}"
-#   loop: "{{oracle_sw_image_db}}"
-#   when: item.version == oracle_version_db
 #   tags:
-#     - oradbswunpack
+#     - responsefileswdb
 
-- name: Setup response file for install (DB)
-  template: src=db-install.rsp.{{ oracle_version_db }}.j2 dest={{ oracle_rsp_stage }}/{{ oracle_db_responsefile }}
-  become: yes
-  become_user: "{{ oracle_user }}"
-  tags:
-    - responsefileswdb
+# - name: Install Oracle Database Server
+#   shell: "{{ oracle_stage }}/{{ oracle_version_db }}/database/runInstaller -silent -responseFile {{ oracle_rsp_stage }}/{{ oracle_db_responsefile }} -ignoreSysPrereqs -ignorePrereq -waitforcompletion"
+#   become: yes
+#   become_user: "{{ oracle_user }}"
+#   register: oradbinstall
+#   tags:
+#     - oradbinstall
 
-- name: Install Oracle Database Server
-  shell: "{{ oracle_stage }}/{{ oracle_version_db }}/database/runInstaller -silent -responseFile {{ oracle_rsp_stage }}/{{ oracle_db_responsefile }} -ignoreSysPrereqs -ignorePrereq -waitforcompletion"
-  become: yes
-  become_user: "{{ oracle_user }}"
-  register: oradbinstall
-  tags:
-    - oradbinstall
+# - debug: 
+#     msg: "{{oradbinstall.stdout}}"
 
-- debug: 
-    msg: "{{oradbinstall.stdout}}"
+# - name: Run oraInstroot script after installation
+#   shell: "{{ oracle_inventory_loc }}/orainstRoot.sh"
+#   tags:
+#     - runroot
 
-- name: Run oraInstroot script after installation
-  shell: "{{ oracle_inventory_loc }}/orainstRoot.sh"
-  tags:
-    - runroot
-
-- name: Run root script after installation
-  shell: "{{ oracle_home_db }}/root.sh"
-  tags:
-    - runroot
+# - name: Run root script after installation
+#   shell: "{{ oracle_home_db }}/root.sh"
+#   tags:
+#     - runroot

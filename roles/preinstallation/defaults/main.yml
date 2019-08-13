@@ -19,6 +19,7 @@ oracle_packages:
   - sysstat
   - unixODBC
   - unixODBC-devel
+  - elfutils-libelf-devel
 
 ## oracle softwares
 # oracle_software_11201:

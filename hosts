@@ -2,11 +2,12 @@
 192.168.111.208 ansible_connection=ssh ansible_user=root #ansible_ssh_pass=Lanhai@2019!135
 
 [single:vars]
-oracle_sid = test
 oracle_version_db = 11.2.0.4
 oracle_home_number = db_1
+
+oracle_sid = zhhs
 syspassword=oracle
 systempassword=oracle
 nationalcharacterset=AL16UTF16
-characterset=AL32UTF8
+characterset=ZHS16GBK
 gdbname=test
