@@ -7,7 +7,7 @@
     - "export ORACLE_BASE={{ oracle_base }}"
     - "export ORACLE_HOME={{ oracle_home_db }}"
     - "export ORACLE_SID={{ oracle_sid }}"
-    - "export PATH==$ORACLE_HOME/bin:$PATH"
+    - "export PATH=$ORACLE_HOME/bin:$PATH"
 
 
 - name: Create stage directory (base)
